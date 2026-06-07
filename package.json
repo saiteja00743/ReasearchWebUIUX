@@ -1,0 +1,27 @@
+{
+  "name": "researchhub",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The easiest way for students to publish and showcase research, projects, and technical articles.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @researchhub/web",
+    "dev:api": "npm run dev --workspace @researchhub/api",
+    "build": "npm run build --workspace @researchhub/web && npm run build --workspace @researchhub/api",
+    "lint": "npm run lint --workspace @researchhub/web && npm run lint --workspace @researchhub/api",
+    "typecheck": "npm run typecheck --workspace @researchhub/web && npm run typecheck --workspace @researchhub/api"
+  },
+  "overrides": {
+    "postcss": "8.5.15",
+    "next": {
+      "postcss": "8.5.15"
+    }
+  },
+  "engines": {
+    "node": ">=20.11.0",
+    "npm": ">=10.0.0"
+  }
+}
