@@ -16,7 +16,8 @@ import { userRouter } from "./routes/user.routes.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
+  const helmetFn: any = helmet;
+  app.use(helmetFn());
   app.use(cors({ origin: process.env.APP_URL, credentials: true }));
   app.use(compression());
   app.use(cookieParser());
