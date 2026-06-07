@@ -16,7 +16,7 @@ import { userRouter } from "./routes/user.routes.js";
 export function createApp() {
   const app = express();
 
-  const helmetFn: any = helmet;
+  const helmetFn = typeof helmet === "function" ? (helmet as any) : (helmet as any).default;
   app.use(helmetFn());
   app.use(cors({ origin: process.env.APP_URL, credentials: true }));
   app.use(compression());
