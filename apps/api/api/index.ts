@@ -492,7 +492,13 @@ function requireAuth(req: AuthRequest, res: Response, next: NextFunction) {
 
 const app = express();
 
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({
+  origin: true,           // reflect the request origin (allows all)
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+}));
+app.options("*", cors());  // handle preflight for all routes
 app.use(cookieParser());
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -694,6 +700,15 @@ app.patch("/api/v1/users/me", requireAuth, (req: AuthRequest, res) => {
   res.json({ user: publicUser(user) });
 });
 
+app.get("/api/v1/users/me", requireAuth, (req: AuthRequest, res) => {
+  const user = runtimeUsers.find(u => u.id === req.user!.id);
+  if (!user) { res.status(404).json({ error: { message: "User not found" } }); return; }
+  const publications = DEMO_PUBLICATIONS.filter(
+    p => (p.owner as any).id === user.id && p.status === "published"
+  );
+  res.json({ user: publicUser(user), publications });
+});
+
 app.post("/api/v1/users/:username/follow", requireAuth, (_req, res) => {
   res.json({ ok: true });
 });
@@ -827,3 +842,4 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 export default app;
+export const handler = app;
