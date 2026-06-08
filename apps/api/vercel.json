@@ -1,12 +1,4 @@
 {
-  "version": 2,
-  "functions": {
-    "api/index.ts": {
-      "memory": 512,
-      "maxDuration": 30
-    }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
-  ]
+  "$comment": "Vercel config is at the repo root vercel.json. This file is intentionally minimal.",
+  "version": 2
 }

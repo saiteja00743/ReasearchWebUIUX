@@ -37,3 +37,6 @@ export function createApp() {
 
   return app;
 }
+
+// Default export for Vercel compatibility
+export default createApp();
