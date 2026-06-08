@@ -755,6 +755,43 @@ app.get("/api/v1/admin/publications/review", requireAuth, (req: AuthRequest, res
   res.json({ publications: DEMO_PUBLICATIONS.filter(p => p.status === "in_review") });
 });
 
+// ── Root & API index ──────────────────────────────────────────────────────────
+const demoPayload = () => ({
+  name: "ResearchHub API",
+  version: "1.0.0",
+  mode: "demo",
+  status: "operational",
+  timestamp: new Date().toISOString(),
+  description: "ResearchHub API is running in showcase/demo mode with 12 seeded research publications and 5 demo user accounts. No database or external services required.",
+  demoAccounts: [
+    { email: "arjun@demo.researchhub.app", password: "Demo@1234", role: "student" },
+    { email: "priya@demo.researchhub.app", password: "Demo@1234", role: "reviewer" },
+    { email: "rohan@demo.researchhub.app", password: "Demo@1234", role: "student" },
+    { email: "sneha@demo.researchhub.app", password: "Demo@1234", role: "student" },
+    { email: "admin@demo.researchhub.app", password: "Admin@1234", role: "admin" }
+  ],
+  stats: {
+    publications: DEMO_PUBLICATIONS.filter(p => p.status === "published").length,
+    users: DEMO_USERS.length,
+    categories: [...new Set(DEMO_PUBLICATIONS.map(p => p.category))]
+  },
+  endpoints: {
+    root: "GET /",
+    health: "GET /health",
+    demo: "GET /api/v1/demo",
+    publications: "GET /api/v1/publications?q=&category=&sort=latest|trending|downloads&page=1",
+    publicationDetail: "GET /api/v1/publications/:slug",
+    userProfile: "GET /api/v1/users/:username",
+    login: "POST /api/v1/auth/login  { email, password }",
+    register: "POST /api/v1/auth/register  { name, username, email, password }",
+    aiGenerate: "POST /api/v1/ai/generate  { type: abstract|keywords|citation|summary, input }"
+  }
+});
+
+app.get("/", (_req, res) => res.json(demoPayload()));
+app.get("/api", (_req, res) => res.json(demoPayload()));
+app.get("/api/v1", (_req, res) => res.json(demoPayload()));
+
 // ── Demo info ─────────────────────────────────────────────────────────────────
 app.get("/api/v1/demo", (_req, res) => {
   res.json({
